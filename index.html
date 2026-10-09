@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathe-Abenteuer</title>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color:#f1f5f9;background:#111827}*{box-sizing:border-box}body{margin:0;padding:18px}main{max-width:760px;margin:auto}h1{color:#a3e635;margin:8px 0}h2{margin:8px 0 15px}.panel{background:#1f2937;border:2px solid #475569;border-radius:12px;padding:20px;margin:16px 0}button,select,input{font:inherit;border-radius:8px;padding:12px}button{background:#65a30d;color:white;border:0;font-weight:700;cursor:pointer}button:hover{background:#4d7c0f}button:disabled{opacity:.5;cursor:default}select,input{background:#0f172a;color:white;border:1px solid #64748b}input{width:100%;margin:10px 0}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.muted{color:#cbd5e1}.question{font-size:clamp(24px,5vw,38px);font-weight:800;text-align:center;margin:24px 0}.progress{background:#374151;height:16px;border-radius:10px;overflow:hidden}.progress>div{background:#84cc16;height:100%;transition:width .3s}.badge{background:#334155;border:1px solid #64748b;border-radius:10px;padding:12px}.badge.locked{opacity:.42;filter:grayscale(1)}#feedback{min-height:50px;line-height:1.5}#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#14532d;border:2px solid #a3e635;padding:12px 20px;border-radius:10px;z-index:10;display:none;text-align:center;max-width:90vw}small{color:#cbd5e1} .hidden{display:none} .score{font-size:20px;font-weight:700}
+</style>
+</head>
+<body><main>
+<header><h1>⛏️ Mathe-Abenteuer</h1><p class="muted">Brüche & Dezimalzahlen · Klasse 7–8</p></header>
+<section class="panel"><div class="row"><div><strong id="level">Level 1</strong><div id="xpLabel" class="muted">0 XP</div></div><div><strong id="stats">0 richtige Aufgaben</strong><div id="streak" class="muted">Serie: 0</div></div></div><div class="progress" aria-label="Levelfortschritt"><div id="bar" style="width:0%"></div></div></section>
+<section class="panel"><h2>🎯 Training</h2><div class="row"><label>Bereich<br><select id="topic"><option value="mix">Gemischt</option><option value="fraction">Bruchrechnung</option><option value="decimal">Dezimalrechnung</option></select></label><label>Schwierigkeit<br><select id="difficulty"><option value="easy">Einfach · 5 XP</option><option value="medium" selected>Mittel · 10 XP</option><option value="hard">Schwer · 20 XP</option></select></label></div><div id="question" class="question">Bereit für deine erste Aufgabe?</div><label for="answer">Deine Antwort (Brüche z. B. 3/4, Dezimalzahlen z. B. 0,75)</label><input id="answer" autocomplete="off" inputmode="decimal" placeholder="Antwort eingeben" disabled><div class="row"><button id="check" disabled>Antwort prüfen</button><button id="next">Neue Aufgabe</button></div><p id="feedback" role="status"></p></section>
+<section class="panel"><h2>🏆 Erfolge</h2><div id="achievements" class="row"></div></section>
+<section class="panel"><h2>📊 Lernfortschritt</h2><p id="summary"></p><button id="reset" style="background:#991b1b">Fortschritt zurücksetzen</button><p><small>Die Daten werden ausschließlich auf diesem Gerät im Browser gespeichert. Bei Löschung der Websitedaten gehen sie verloren.</small></p></section>
+</main><div id="toast" role="status"></div>
+<script>
+'use strict';
+const KEY='mathe-abenteuer-v1';
+const defaults=()=>({xp:0,correct:0,attempts:0,streak:0,bestStreak:0,fractions:0,decimals:0,unlocked:[]});
+let state;try{const saved=JSON.parse(localStorage.getItem(KEY));state={...defaults(),...(saved&&typeof saved==='object'?saved:{})};if(!Array.isArray(state.unlocked))state.unlocked=[];}catch{state=defaults()}
+const $=id=>document.getElementById(id),rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const simplify=(n,d)=>{if(d<0){n=-n;d=-d}let g=gcd(n,d);return [n/g,d/g]};
+const fractionText=([n,d])=>d===1?String(n):`${n}/${d}`;
+const decimalText=n=>String(Number(n.toFixed(5))).replace('.',',');
+const achievements=[{id:'start',icon:'🌱',name:'Erste Schritte',desc:'10 Aufgaben richtig',ok:s=>s.correct>=10},{id:'miner',icon:'⛏️',name:'Bruch-Bergmann',desc:'50 Bruchaufgaben',ok:s=>s.fractions>=50},{id:'diamond',icon:'💎',name:'Diamant-Verstand',desc:'100 Aufgaben richtig',ok:s=>s.correct>=100},{id:'fire',icon:'🔥',name:'Unaufhaltsam',desc:'20 richtige in Folge',ok:s=>s.bestStreak>=20},{id:'castle',icon:'🏰',name:'Meister der Zahlen',desc:'Level 20',ok:s=>Math.floor(s.xp/100)+1>=20},{id:'crown',icon:'👑',name:'Mathe-Legende',desc:'1.000 richtige Aufgaben',ok:s=>s.correct>=1000}];
+let task=null,answered=false;
+function makeFraction(diff){
+ const max={easy:8,medium:12,hard:20}[diff],ops=diff==='easy'?['+','-']:['+','-','×','÷'];
+ let a=rand(1,max),b=rand(2,max),c=rand(1,max),d=rand(2,max),op=ops[rand(0,ops.length-1)];
+ if(op==='-'&&a/b<c/d){[a,c]=[c,a];[b,d]=[d,b]}
+ let n,den;
+ if(op==='+'){n=a*d+c*b;den=b*d}else if(op==='-'){n=a*d-c*b;den=b*d}else if(op==='×'){n=a*c;den=b*d}else{n=a*d;den=b*c}
+ const result=simplify(n,den);
+ return {kind:'fraction',prompt:`${a}/${b} ${op} ${c}/${d} = ?`,result:result[0]/result[1],explanation:`${a}/${b} ${op} ${c}/${d} = ${fractionText(result)}. Gib den vollständig gekürzten Bruch oder seinen Dezimalwert ein.`};
+}
+function makeDecimal(diff){
+ const scale=diff==='easy'?10:100,limit=diff==='hard'?2000:200;
+ const a=rand(1,limit)/scale,b=rand(1,limit)/scale;
+ const ops=diff==='easy'?['+','-']:['+','-','×','÷'];let op=ops[rand(0,ops.length-1)],x=a,y=b;
+ if(op==='-'&&x<y)[x,y]=[y,x];
+ if(op==='÷'){y=rand(1,12)/10;x=rand(1,15)*y;} // always exact quotient
+ let result=op==='+'?x+y:op==='-'?x-y:op==='×'?x*y:x/y;
+ result=Number(result.toFixed(8));
+ return {kind:'decimal',prompt:`${decimalText(x)} ${op} ${decimalText(y)} = ?`,result,explanation:`${decimalText(x)} ${op} ${decimalText(y)} = ${decimalText(result)}.`};
+}
+function newTask(){const topic=$('topic').value,kind=topic==='mix'?(Math.random()<.5?'fraction':'decimal'):topic;task=kind==='fraction'?makeFraction($('difficulty').value):makeDecimal($('difficulty').value);answered=false;$('question').textContent=task.prompt;$('answer').value='';$('answer').disabled=false;$('check').disabled=false;$('feedback').textContent='';$('answer').focus()}
+function parseAnswer(raw){let t=raw.trim().replace(/\s+/g,'').replace(',','.');if(!t)return NaN;if(/^[-+]?\d+\/[-+]?\d+$/.test(t)){const [n,d]=t.split('/').map(Number);return d===0?NaN:n/d}if(!/^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(t))return NaN;return Number(t)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
+function showToast(message){const el=$('toast');el.textContent='🏆 Erfolg freigeschaltet: '+message;el.style.display='block';setTimeout(()=>{el.style.display='none'},3500)}
+function render(){let level=Math.floor(state.xp/100)+1;$('level').textContent='Level '+level;$('xpLabel').textContent=state.xp+' XP · '+(state.xp%100)+'/100 bis zum nächsten Level';$('bar').style.width=(state.xp%100)+'%';$('stats').textContent=state.correct+' richtige Aufgaben';$('streak').textContent='Serie: '+state.streak+' · Rekord: '+state.bestStreak;$('summary').textContent=`${state.attempts} Versuche · ${state.correct} richtig · ${state.attempts?Math.round(100*state.correct/state.attempts):0}% Trefferquote · ${state.fractions} richtige Bruchaufgaben · ${state.decimals} richtige Dezimalaufgaben`;
+ $('achievements').replaceChildren();for(const a of achievements){const unlocked=state.unlocked.includes(a.id);const el=document.createElement('div');el.className='badge'+(unlocked?'':' locked');el.style.flex='1 1 180px';const title=document.createElement('strong');title.textContent=a.icon+' '+a.name;const desc=document.createElement('div');desc.textContent=a.desc+(unlocked?' ✓':' 🔒');el.append(title,desc);$('achievements').append(el)}}
+function check(){if(!task||answered)return;const value=parseAnswer($('answer').value);if(!Number.isFinite(value)){$('feedback').textContent='Bitte eine gültige Zahl oder einen Bruch eingeben.';return}answered=true;$('check').disabled=true;$('answer').disabled=true;state.attempts++;const right=Math.abs(value-task.result)<1e-7;if(right){state.correct++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);state.xp+=({easy:5,medium:10,hard:20})[$('difficulty').value];state[task.kind==='fraction'?'fractions':'decimals']++;$('feedback').textContent='✅ Richtig! '+task.explanation}else{state.streak=0;$('feedback').textContent='❌ Nicht ganz. '+task.explanation}for(const a of achievements){if(!state.unlocked.includes(a.id)&&a.ok(state)){state.unlocked.push(a.id);showToast(a.name)}}save();render()}
+$('check').addEventListener('click',check);$('next').addEventListener('click',newTask);$('answer').addEventListener('keydown',e=>{if(e.key==='Enter')check()});$('topic').addEventListener('change',newTask);$('difficulty').addEventListener('change',newTask);$('reset').addEventListener('click',()=>{if(confirm('Wirklich alle XP, Level und Erfolge löschen?')){state=defaults();save();render();newTask()}});render();newTask();
+</script></body></html>
