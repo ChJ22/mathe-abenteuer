@@ -5,27 +5,32 @@
 <title>Mathe-Abenteuer</title>
 <style>
 :root{font-family:system-ui,Arial,sans-serif;color:#f1f5f9;background:#111827}*{box-sizing:border-box}body{margin:0;padding:18px}main{max-width:760px;margin:auto}h1{color:#a3e635;margin:8px 0}h2{margin:8px 0 15px}.panel{background:#1f2937;border:2px solid #475569;border-radius:12px;padding:20px;margin:16px 0}button,select,input{font:inherit;border-radius:8px;padding:12px}button{background:#65a30d;color:white;border:0;font-weight:700;cursor:pointer}button:hover{background:#4d7c0f}button:disabled{opacity:.5;cursor:default}select,input{background:#0f172a;color:white;border:1px solid #64748b}input{width:100%;margin:10px 0}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.muted{color:#cbd5e1}.question{font-size:clamp(24px,5vw,38px);font-weight:800;text-align:center;margin:24px 0}.progress{background:#374151;height:16px;border-radius:10px;overflow:hidden}.progress>div{background:#84cc16;height:100%;transition:width .3s}.badge{background:#334155;border:1px solid #64748b;border-radius:10px;padding:12px}.badge.locked{opacity:.42;filter:grayscale(1)}#feedback{min-height:50px;line-height:1.5}#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#14532d;border:2px solid #a3e635;padding:12px 20px;border-radius:10px;z-index:10;display:none;text-align:center;max-width:90vw}small{color:#cbd5e1} .hidden{display:none} .score{font-size:20px;font-weight:700}
+
+:root{background:#101d22;color:#eef4dc}body{background:linear-gradient(135deg,#142a30,#101a20);padding:16px}main{max-width:1000px}.panel{background:#203238;border:3px solid #516362;border-radius:3px;box-shadow:5px 5px 0 #080f14}h1,h2{letter-spacing:.5px}button{border-radius:2px;border:2px solid #b8dc77;box-shadow:0 3px 0 #233d19;min-height:44px}button.secondary{background:#344f59;border-color:#6b8b96}input,select{border-radius:2px;max-width:100%}.badge{border-radius:2px;min-width:0}.badge.locked{opacity:.7}.adventure-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}.world{width:100%;image-rendering:pixelated;background:#83bcb9;border:3px solid #718176}.equip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.equip-grid button{font-size:14px}.journey{color:#d8eab8;line-height:1.7}#cardImage{width:100%;image-rendering:pixelated}dialog{color:#eef4dc;background:#203238;border:3px solid #a3e635;max-width:560px;width:95%;max-height:92vh;overflow:auto}dialog::backdrop{background:#000b}.progress{margin-top:12px}.feedback-good{color:#bef264}.feedback-bad{color:#ffb8ad}.question{font-family:monospace}nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#c9e797;padding:8px}#toast{border-radius:2px}small{line-height:1.6}@media(max-width:700px){.adventure-grid{grid-template-columns:1fr}.panel{padding:14px}.row>*{min-width:130px}body{padding:10px}}
 </style>
 </head>
 <body><main>
-<header><h1>⛏️ Mathe-Abenteuer</h1><p class="muted">Brüche & Dezimalzahlen · Klasse 7–8</p></header>
+<header><h1>⛏️ Mathe-Abenteuer</h1><p class="muted">Dein Wissen baut deine Welt · Klasse 7–8</p><nav><a href="#adventure">Abenteuer</a><a href="#training">Training</a><a href="#trophies">Erfolge</a></nav><p class="muted">Eigene Blockwelt mit Pixelgrafiken</p></header>
 <section class="panel"><div class="row"><div><strong id="level">Level 1</strong><div id="xpLabel" class="muted">0 XP</div></div><div><strong id="stats">0 richtige Aufgaben</strong><div id="streak" class="muted">Serie: 0</div></div></div><div class="progress" aria-label="Levelfortschritt"><div id="bar" style="width:0%"></div></div></section>
-<section class="panel"><h2>🎯 Training</h2><div class="row"><label>Bereich<br><select id="topic"><option value="mix">Gemischt</option><option value="fraction">Bruchrechnung</option><option value="decimal">Dezimalrechnung</option></select></label><label>Schwierigkeit<br><select id="difficulty"><option value="easy">Einfach · 5 XP</option><option value="medium" selected>Mittel · 10 XP</option><option value="hard">Schwer · 20 XP</option></select></label></div><div id="question" class="question">Bereit für deine erste Aufgabe?</div><label for="answer">Deine Antwort (Brüche z. B. 3/4, Dezimalzahlen z. B. 0,75)</label><input id="answer" autocomplete="off" inputmode="decimal" placeholder="Antwort eingeben" disabled><div class="row"><button id="check" disabled>Antwort prüfen</button><button id="next">Neue Aufgabe</button></div><p id="feedback" role="status"></p></section>
-<section class="panel"><h2>🏆 Erfolge</h2><div id="achievements" class="row"></div></section>
+<section class="panel" id="adventure"><h2>Dein Abenteuer</h2><div class="adventure-grid"><div><canvas id="world" class="world" width="480" height="270" aria-label="Deine Figur in einer Pixelwelt"></canvas><label for="heroName">Name deines Helden</label><input id="heroName" maxlength="20" placeholder="Abenteurer"><p id="heroStatus"></p></div><div><h3 id="chapter"></h3><p id="goal" class="journey"></p><div class="progress"><div id="questBar"></div></div><h3>Ausrüstung</h3><div id="equipment" class="equip-grid"></div><h3>Mathe-Arena</h3><p id="battleStatus" aria-live="polite"></p><div class="row"><button id="battle">Kampf starten</button><button id="leave" class="secondary" hidden>Kampf verlassen</button></div><p><small>Richtige Antworten treffen den Gegner. Bei Fehlern verlierst du Herzen. Nahrung heilt einmal pro Kampf automatisch. Ohne Zeitdruck.</small></p></div></div></section>
+<section class="panel" id="training"><h2>🎯 Training</h2><div class="row"><label>Bereich<br><select id="topic"><option value="mix">Gemischt</option><option value="fraction">Bruchrechnung</option><option value="decimal">Dezimalrechnung</option></select></label><label>Schwierigkeit<br><select id="difficulty"><option value="easy">Einfach · 5 XP</option><option value="medium" selected>Mittel · 10 XP</option><option value="hard">Schwer · 20 XP</option></select></label></div><div id="question" class="question">Bereit für deine erste Aufgabe?</div><label for="answer">Deine Antwort (Brüche z. B. 3/4, Dezimalzahlen z. B. 0,75)</label><input id="answer" autocomplete="off" inputmode="text" placeholder="Antwort eingeben" disabled><div class="row"><button id="check" disabled>Antwort prüfen</button><button id="next">Neue Aufgabe</button></div><p id="feedback" role="status"></p></section>
+<section class="panel" id="trophies"><h2>🏆 Erfolge & Erinnerungskarten</h2><p>Jeden freigeschalteten Erfolg kannst du als Bild speichern.</p><div id="achievements" class="row"></div></section>
 <section class="panel"><h2>📊 Lernfortschritt</h2><p id="summary"></p><button id="reset" style="background:#991b1b">Fortschritt zurücksetzen</button><p><small>Die Daten werden ausschließlich auf diesem Gerät im Browser gespeichert. Bei Löschung der Websitedaten gehen sie verloren.</small></p></section>
-</main><div id="toast" role="status"></div>
+<section class="panel"><h2>Spielstand sichern</h2><div class="row"><button id="backup" class="secondary">Spielstand herunterladen</button><label>Spielstand laden<input id="restore" type="file" accept="application/json,.json"></label></div><p id="storageNote" role="status"></p></section></main><dialog id="cardDialog"><h2 id="cardTitle"></h2><img id="cardImage" alt="Persönliche Erfolgskarte"><p>Auf dem iPhone: „Bild teilen“ → „Bild sichern“. Oder das Bild lange drücken und speichern.</p><div class="row"><button id="shareCard">Bild teilen</button><a id="downloadCard" style="color:#c9e797" download="mathe-erfolg.png">PNG herunterladen</a><button id="closeCard" class="secondary">Schließen</button></div><p id="shareNote" role="status"></p></dialog><div id="toast" role="status"></div>
 <script>
 'use strict';
-const KEY='mathe-abenteuer-v1';
-const defaults=()=>({xp:0,correct:0,attempts:0,streak:0,bestStreak:0,fractions:0,decimals:0,unlocked:[]});
-let state;try{const saved=JSON.parse(localStorage.getItem(KEY));state={...defaults(),...(saved&&typeof saved==='object'?saved:{})};if(!Array.isArray(state.unlocked))state.unlocked=[];}catch{state=defaults()}
+const KEY='mathe-abenteuer-v2';
+const defaults=()=>({xp:0,correct:0,attempts:0,streak:0,bestStreak:0,fractions:0,decimals:0,unlocked:[],wins:0,name:'Abenteurer',armor:'none',weapon:'none',cards:{}});
+let state;try{const saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('mathe-abenteuer-v1'));state={...defaults(),...(saved&&typeof saved==='object'?saved:{})};if(!Array.isArray(state.unlocked))state.unlocked=[];}catch{state=defaults()}
+state=validateState(state);
 const $=id=>document.getElementById(id),rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
 const simplify=(n,d)=>{if(d<0){n=-n;d=-d}let g=gcd(n,d);return [n/g,d/g]};
 const fractionText=([n,d])=>d===1?String(n):`${n}/${d}`;
 const decimalText=n=>String(Number(n.toFixed(5))).replace('.',',');
 const achievements=[{id:'start',icon:'🌱',name:'Erste Schritte',desc:'10 Aufgaben richtig',ok:s=>s.correct>=10},{id:'miner',icon:'⛏️',name:'Bruch-Bergmann',desc:'50 Bruchaufgaben',ok:s=>s.fractions>=50},{id:'diamond',icon:'💎',name:'Diamant-Verstand',desc:'100 Aufgaben richtig',ok:s=>s.correct>=100},{id:'fire',icon:'🔥',name:'Unaufhaltsam',desc:'20 richtige in Folge',ok:s=>s.bestStreak>=20},{id:'castle',icon:'🏰',name:'Meister der Zahlen',desc:'Level 20',ok:s=>Math.floor(s.xp/100)+1>=20},{id:'crown',icon:'👑',name:'Mathe-Legende',desc:'1.000 richtige Aufgaben',ok:s=>s.correct>=1000}];
-let task=null,answered=false;
+let task=null,answered=false,battle=null;
+
 function makeFraction(diff){
  const max={easy:8,medium:12,hard:20}[diff],ops=diff==='easy'?['+','-']:['+','-','×','÷'];
  let a=rand(1,max),b=rand(2,max),c=rand(1,max),d=rand(2,max),op=ops[rand(0,ops.length-1)];
@@ -33,7 +38,7 @@ function makeFraction(diff){
  let n,den;
  if(op==='+'){n=a*d+c*b;den=b*d}else if(op==='-'){n=a*d-c*b;den=b*d}else if(op==='×'){n=a*c;den=b*d}else{n=a*d;den=b*c}
  const result=simplify(n,den);
- return {kind:'fraction',prompt:`${a}/${b} ${op} ${c}/${d} = ?`,result:result[0]/result[1],explanation:`${a}/${b} ${op} ${c}/${d} = ${fractionText(result)}. Gib den vollständig gekürzten Bruch oder seinen Dezimalwert ein.`};
+ return {exact:result,diff,kind:'fraction',prompt:`${a}/${b} ${op} ${c}/${d} = ?`,result:result[0]/result[1],explanation:(op==='+'||op==='-')?`Gemeinsamer Nenner ${b*d}: (${a*d} ${op} ${c*b})/${b*d} = ${n}/${den} = ${fractionText(result)}.`:op==='×'?`Zähler mal Zähler, Nenner mal Nenner: ${a*c}/${b*d} = ${fractionText(result)}.`:`Mit dem Kehrwert multiplizieren: ${a}/${b} × ${d}/${c} = ${fractionText(result)}.`};
 }
 function makeDecimal(diff){
  const scale=diff==='easy'?10:100,limit=diff==='hard'?2000:200;
@@ -43,14 +48,95 @@ function makeDecimal(diff){
  if(op==='÷'){y=rand(1,12)/10;x=rand(1,15)*y;} // always exact quotient
  let result=op==='+'?x+y:op==='-'?x-y:op==='×'?x*y:x/y;
  result=Number(result.toFixed(8));
- return {kind:'decimal',prompt:`${decimalText(x)} ${op} ${decimalText(y)} = ?`,result,explanation:`${decimalText(x)} ${op} ${decimalText(y)} = ${decimalText(result)}.`};
+ return {exact:simplify(Math.round(result*100000000),100000000),diff,kind:'decimal',prompt:`${decimalText(x)} ${op} ${decimalText(y)} = ?`,result,explanation:`${decimalText(x)} ${op} ${decimalText(y)} = ${decimalText(result)}. `+((op==='+'||op==='-')?'Kommas untereinander schreiben und stellenweise rechnen.':op==='×'?'Erst ohne Kommas multiplizieren, dann die Nachkommastellen beider Faktoren zusammen abzählen.':'Beide Zahlen mit derselben Zehnerpotenz erweitern, bis der Divisor ganzzahlig ist; dann dividieren.')};
 }
 function newTask(){const topic=$('topic').value,kind=topic==='mix'?(Math.random()<.5?'fraction':'decimal'):topic;task=kind==='fraction'?makeFraction($('difficulty').value):makeDecimal($('difficulty').value);answered=false;$('question').textContent=task.prompt;$('answer').value='';$('answer').disabled=false;$('check').disabled=false;$('feedback').textContent='';$('answer').focus()}
 function parseAnswer(raw){let t=raw.trim().replace(/\s+/g,'').replace(',','.');if(!t)return NaN;if(/^[-+]?\d+\/[-+]?\d+$/.test(t)){const [n,d]=t.split('/').map(Number);return d===0?NaN:n/d}if(!/^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(t))return NaN;return Number(t)}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('storageNote').textContent='Spielstand wird auf diesem Gerät gespeichert.'}catch{$('storageNote').textContent='Speichern ist in diesem Browser nicht möglich. Bitte den Spielstand herunterladen.'}}
 function showToast(message){const el=$('toast');el.textContent='🏆 Erfolg freigeschaltet: '+message;el.style.display='block';setTimeout(()=>{el.style.display='none'},3500)}
 function render(){let level=Math.floor(state.xp/100)+1;$('level').textContent='Level '+level;$('xpLabel').textContent=state.xp+' XP · '+(state.xp%100)+'/100 bis zum nächsten Level';$('bar').style.width=(state.xp%100)+'%';$('stats').textContent=state.correct+' richtige Aufgaben';$('streak').textContent='Serie: '+state.streak+' · Rekord: '+state.bestStreak;$('summary').textContent=`${state.attempts} Versuche · ${state.correct} richtig · ${state.attempts?Math.round(100*state.correct/state.attempts):0}% Trefferquote · ${state.fractions} richtige Bruchaufgaben · ${state.decimals} richtige Dezimalaufgaben`;
- $('achievements').replaceChildren();for(const a of achievements){const unlocked=state.unlocked.includes(a.id);const el=document.createElement('div');el.className='badge'+(unlocked?'':' locked');el.style.flex='1 1 180px';const title=document.createElement('strong');title.textContent=a.icon+' '+a.name;const desc=document.createElement('div');desc.textContent=a.desc+(unlocked?' ✓':' 🔒');el.append(title,desc);$('achievements').append(el)}}
-function check(){if(!task||answered)return;const value=parseAnswer($('answer').value);if(!Number.isFinite(value)){$('feedback').textContent='Bitte eine gültige Zahl oder einen Bruch eingeben.';return}answered=true;$('check').disabled=true;$('answer').disabled=true;state.attempts++;const right=Math.abs(value-task.result)<1e-7;if(right){state.correct++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);state.xp+=({easy:5,medium:10,hard:20})[$('difficulty').value];state[task.kind==='fraction'?'fractions':'decimals']++;$('feedback').textContent='✅ Richtig! '+task.explanation}else{state.streak=0;$('feedback').textContent='❌ Nicht ganz. '+task.explanation}for(const a of achievements){if(!state.unlocked.includes(a.id)&&a.ok(state)){state.unlocked.push(a.id);showToast(a.name)}}save();render()}
-$('check').addEventListener('click',check);$('next').addEventListener('click',newTask);$('answer').addEventListener('keydown',e=>{if(e.key==='Enter')check()});$('topic').addEventListener('change',newTask);$('difficulty').addEventListener('change',newTask);$('reset').addEventListener('click',()=>{if(confirm('Wirklich alle XP, Level und Erfolge löschen?')){state=defaults();save();render();newTask()}});render();newTask();
+ $('achievements').replaceChildren();for(const a of achievements){const unlocked=state.unlocked.includes(a.id);const el=document.createElement('div');el.className='badge'+(unlocked?'':' locked');el.style.flex='1 1 180px';const title=document.createElement('strong');title.textContent=a.icon+' '+a.name;const desc=document.createElement('div');desc.textContent=a.desc+(unlocked?' ✓':' 🔒');el.append(title,desc);if(unlocked){const button=document.createElement('button');button.textContent='Erfolgskarte speichern';button.style.marginTop='10px';button.onclick=()=>openCard(a);el.append(button)}$('achievements').append(el)}renderAdventure()}
+function check(){if(!task||answered)return;const value=parseAnswer($('answer').value);if(!Number.isFinite(value)){$('feedback').textContent='Bitte eine gültige Zahl oder einen Bruch eingeben.';return}answered=true;$('check').disabled=true;$('answer').disabled=true;state.attempts++;const right=answerMatches($('answer').value,task);if(right){state.correct++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);state.xp+=({easy:5,medium:10,hard:20})[task.diff];state[task.kind==='fraction'?'fractions':'decimals']++;$('feedback').textContent='✅ Richtig! '+task.explanation}else{state.streak=0;$('feedback').textContent='❌ Nicht ganz. '+task.explanation}if(battle)battleTurn(right);unlockAchievements();save();render()}
+function validateState(raw){
+ const s={...defaults()};if(!raw||typeof raw!=='object')return s;
+ for(const k of ['xp','correct','attempts','streak','bestStreak','fractions','decimals','wins'])s[k]=Number.isSafeInteger(raw[k])&&raw[k]>=0?Math.min(raw[k],10000000):0;
+ s.name=typeof raw.name==='string'?raw.name.slice(0,20):s.name;
+ s.unlocked=Array.isArray(raw.unlocked)?raw.unlocked.filter(x=>typeof x==='string'):[];
+ s.armor=['none','leather','iron','crystal'].includes(raw.armor)?raw.armor:'none';s.weapon=['none','wood','iron','crystal'].includes(raw.weapon)?raw.weapon:'none';
+ s.cards=raw.cards&&typeof raw.cards==='object'&&!Array.isArray(raw.cards)?raw.cards:{};return s;
+}
+function answerMatches(raw,t){
+ const v=raw.trim().replace(/\s+/g,'').replace(',','.');let n,d;
+ if(/^[-+]?\d+\/[-+]?\d+$/.test(v)){[n,d]=v.split('/').map(Number)}
+ else if(/^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(v)){const digits=(v.split('.')[1]||'').length;if(digits>8)return false;d=10**digits;n=Math.round(Number(v)*d)}else return false;
+ if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||d===0)return false;
+ const [a,b]=simplify(n,d);return BigInt(a)*BigInt(t.exact[1])===BigInt(t.exact[0])*BigInt(b);
+}
+const storyAchievements=[
+ {id:'home',icon:'⌂',name:'Ein Dach über dem Kopf',desc:'5 Aufgaben richtig · deine Hütte',ok:s=>s.correct>=5},
+ {id:'food',icon:'▰',name:'Gut versorgt',desc:'12 Aufgaben richtig · Nahrung im Kampf',ok:s=>s.correct>=12},
+ {id:'leather',icon:'◈',name:'Bereit fürs Abenteuer',desc:'20 Aufgaben richtig · Lederrüstung',ok:s=>s.correct>=20},
+ {id:'wood',icon:'⚔',name:'Die erste Klinge',desc:'30 Aufgaben richtig · Holzschwert & Arena',ok:s=>s.correct>=30},
+ {id:'firstbattle',icon:'★',name:'Wächter des Waldes',desc:'1 Kampf gewonnen · Eisenrüstung',ok:s=>s.wins>=1},
+ {id:'iron',icon:'⚒',name:'Geschmiedet im Wissen',desc:'3 Kämpfe gewonnen · Eisenschwert',ok:s=>s.wins>=3},
+ {id:'crystal',icon:'◇',name:'Kristallheld',desc:'6 Kämpfe gewonnen · Kristallrüstung',ok:s=>s.wins>=6},
+ {id:'champion',icon:'♛',name:'Die Welt beschützt',desc:'10 Kämpfe gewonnen · Kristallschwert',ok:s=>s.wins>=10}
+];achievements.unshift(...storyAchievements);
+const gear=[{slot:'armor',id:'none',name:'Ohne Rüstung',unlock:null},{slot:'armor',id:'leather',name:'Lederrüstung',unlock:'leather'},{slot:'armor',id:'iron',name:'Eisenrüstung',unlock:'firstbattle'},{slot:'armor',id:'crystal',name:'Kristallrüstung',unlock:'crystal'},{slot:'weapon',id:'none',name:'Ohne Schwert',unlock:null},{slot:'weapon',id:'wood',name:'Holzschwert',unlock:'wood'},{slot:'weapon',id:'iron',name:'Eisenschwert',unlock:'iron'},{slot:'weapon',id:'crystal',name:'Kristallschwert',unlock:'champion'}];
+const has=id=>state.unlocked.includes(id);
+function snapshot(){return {name:state.name,armor:state.armor,weapon:state.weapon,correct:state.correct,xp:state.xp,wins:state.wins,home:has('home'),food:has('food'),date:new Date().toLocaleDateString('de-DE')}}
+function unlockAchievements(){let newly=[];for(const a of achievements)if(!has(a.id)&&a.ok(state)){state.unlocked.push(a.id);newly.push(a);if(a.id==='leather')state.armor='leather';if(a.id==='wood')state.weapon='wood';if(a.id==='firstbattle')state.armor='iron';if(a.id==='iron')state.weapon='iron';if(a.id==='crystal')state.armor='crystal';if(a.id==='champion')state.weapon='crystal';state.cards[a.id]=snapshot()}
+ if(newly.length)showToast(newly.map(a=>a.name).join(' · '));
+ for(const g of gear)if(g.unlock&&!has(g.unlock)&&state[g.slot]===g.id)state[g.slot]='none';
+}
+function drawWorld(ctx,w,h,s,enemy=false){
+ ctx.save();ctx.scale(w/480,h/270);ctx.imageSmoothingEnabled=false;
+ const rect=(x,y,ww,hh,c)=>{ctx.fillStyle=c;ctx.fillRect(x,y,ww,hh)};
+ rect(0,0,480,270,'#8ebec1');rect(360,25,32,32,'#fce49a');rect(25,40,85,13,'#d9e8d6');rect(42,27,45,13,'#d9e8d6');
+ for(let x=0;x<480;x+=32){const high=100+((x*17)%67);rect(x,190-high,32,high,'#628d84')}
+ rect(0,210,480,12,'#80ad56');rect(0,222,480,48,'#654c39');for(let x=0;x<480;x+=24)rect(x,234+(x%3)*5,8,8,'#80664c');
+ for(const x of [20,415]){rect(x+15,134,12,76,'#68503d');rect(x,119,45,33,'#416b45');rect(x+7,98,31,33,'#4c8050')}
+ if(s.home){rect(66,142,104,68,'#a08053');rect(57,128,122,16,'#5d4030');rect(69,115,98,13,'#6f4c34');rect(85,157,23,22,'#91cbda');rect(130,169,22,41,'#4f362c');rect(143,190,4,4,'#e8c874');for(let y=147;y<210;y+=15)rect(66,y,104,2,'#85663e')}
+ else{rect(84,202,68,8,'#967045');rect(86,190,22,12,'#be9860')}
+ if(s.food){rect(183,189,35,21,'#8d6037');rect(187,181,27,10,'#deb878');rect(193,180,3,8,'#f6d997');rect(204,180,3,8,'#f6d997')}
+ // Original block character. The same drawing is used on the personal cards.
+ const x=265,y=109;const armor={none:'#4c9896',leather:'#ad7547',iron:'#b9c7cb',crystal:'#68d8d9'}[s.armor]||'#4c9896';
+ rect(x+8,y,36,12,'#4c392f');rect(x+8,y+12,36,32,'#d9a579');rect(x+8,y+12,7,12,'#4c392f');rect(x+17,y+22,5,5,'#213238');rect(x+34,y+22,5,5,'#213238');rect(x+23,y+35,12,3,'#8c5a46');
+ rect(x+4,y+44,44,35,armor);rect(x-8,y+44,12,38,armor);rect(x+48,y+44,12,38,armor);rect(x-8,y+80,12,12,'#d9a579');rect(x+48,y+80,12,12,'#d9a579');rect(x+8,y+79,16,22,'#354c6f');rect(x+28,y+79,16,22,'#354c6f');rect(x+5,y+95,20,6,'#293544');rect(x+27,y+95,20,6,'#293544');
+ if(s.armor!=='none'){rect(x+5,y-4,42,14,armor);rect(x+5,y+10,6,12,armor);rect(x+40,y+10,7,12,armor);rect(x+18,y+48,15,24,'#ffffff22')}
+ if(s.weapon!=='none'){const blade={wood:'#b98b53',iron:'#deeced',crystal:'#71eeed'}[s.weapon];rect(x+61,y+31,8,52,blade);rect(x+55,y+77,20,6,'#e5bd67');rect(x+62,y+83,6,15,'#6f4c34')}
+ if(enemy){rect(355,168,36,42,'#8470a7');rect(350,165,46,14,'#a189bd');rect(361,181,7,7,'#ffc679');rect(379,181,7,7,'#ffc679');rect(359,203,9,7,'#514260');rect(381,203,9,7,'#514260')}
+ ctx.restore();
+}
+function renderAdventure(){
+ $('heroName').value=state.name;$('heroStatus').textContent=`${state.name} · ${state.wins} Siege · Rüstung: ${gear.find(g=>g.slot==='armor'&&g.id===state.armor)?.name} · Schaden: ${damage()} pro Treffer`;
+ const upcoming=storyAchievements.find(a=>!has(a.id));$('chapter').textContent=upcoming?'Nächstes Ziel: '+upcoming.name:'Deine Welt ist sicher!';$('goal').textContent=upcoming?upcoming.desc:'Sammle weiter XP und erreiche die Mathe-Legende.';
+ const thresholds={home:5,food:12,leather:20,wood:30,firstbattle:1,iron:3,crystal:6,champion:10};const current=upcoming?(['home','food','leather','wood'].includes(upcoming.id)?state.correct:state.wins):1;const target=upcoming?thresholds[upcoming.id]:1;$('questBar').style.width=Math.min(100,100*current/target)+'%';
+ $('equipment').replaceChildren();for(const g of gear){const b=document.createElement('button');const equipped=state[g.slot]===g.id;b.textContent=(equipped?'✓ ':'')+g.name;b.className=equipped?'':'secondary';b.disabled=!!g.unlock&&!has(g.unlock);b.onclick=()=>{state[g.slot]=g.id;save();render()};$('equipment').append(b)}
+ $('battle').disabled=!!battle||!has('wood');$('battle').textContent=has('wood')?'Kampf starten':'Arena ab 30 richtigen Aufgaben';$('leave').hidden=!battle;
+ if(battle)$('battleStatus').textContent=`${battle.name}: ${battle.hp}/${battle.max} Energie · Du: ${battle.hearts}/${battle.maxHearts} Herzen · Schwierigkeit: ${battle.tier}`;
+ else if(!$('battleStatus').dataset.result)$('battleStatus').textContent='Übe, baue dein Zuhause und bereite dich auf die Arena vor.';
+ drawWorld($('world').getContext('2d'),480,270,snapshot(),!!battle);
+}
+function damage(){return {none:1,wood:2,iron:3,crystal:4}[state.weapon]||1}
+function startBattle(){if(battle||!has('wood'))return;const i=Math.min(state.wins,9);const max=8+2*i;const hearts=3+({none:0,leather:1,iron:2,crystal:3}[state.armor]||0);const tier=i<2?'easy':i<5?'medium':'hard';battle={name:['Mooswächter','Steingolem','Nebelwächter'][i%3],hp:max,max,hearts,maxHearts:hearts,food:has('food'),tier};$('battleStatus').dataset.result='';$('difficulty').value=tier;$('difficulty').disabled=true;$('topic').disabled=true;newTask();renderAdventure();$('training').scrollIntoView({behavior:'smooth'})}
+function battleTurn(right){if(!battle)return;if(right)battle.hp-=damage();else{battle.hearts--;if(battle.hearts<=1&&battle.food){battle.hearts=Math.min(battle.maxHearts,battle.hearts+2);battle.food=false;$('feedback').textContent+=' Deine Nahrung gibt dir 2 Herzen zurück.'}}
+ if(battle.hp<=0){state.wins++;state.xp+=30;$('battleStatus').textContent='Sieg! +30 XP · Gewonnene Kämpfe: '+state.wins;endBattle()}
+ else if(battle.hearts<=0){$('battleStatus').textContent='Der Gegner war diesmal stärker. Du behältst deine XP. Versuche es erneut!';endBattle()}}
+function endBattle(){battle=null;$('battleStatus').dataset.result='1';$('difficulty').disabled=false;$('topic').disabled=false}
+let cardBlob=null;
+function wrapText(ctx,text,x,y,width,lineHeight){let line='';for(const word of String(text).split(' ')){const trial=line+word+' ';if(ctx.measureText(trial).width>width&&line){ctx.fillText(line.trim(),x,y);y+=lineHeight;line=word+' '}else line=trial}ctx.fillText(line.trim(),x,y);return y}
+function openCard(a){if(!has(a.id))return;const s=state.cards[a.id]||snapshot();const c=document.createElement('canvas');c.width=1080;c.height=1350;const ctx=c.getContext('2d');ctx.fillStyle='#14272e';ctx.fillRect(0,0,1080,1350);ctx.strokeStyle='#b4d878';ctx.lineWidth=12;ctx.strokeRect(30,30,1020,1290);ctx.fillStyle='#b4d878';ctx.font='bold 34px monospace';ctx.fillText('MATHE-ABENTEUER',70,110);ctx.fillStyle='#eef4dc';ctx.font='bold 55px monospace';wrapText(ctx,a.name,70,195,930,65);// Scene and achievement text are composed into a shareable PNG.
+ const scene=document.createElement('canvas');scene.width=960;scene.height=540;drawWorld(scene.getContext('2d'),960,540,s);ctx.fillStyle='#14272e';ctx.fillRect(0,0,1080,330);ctx.strokeStyle='#b4d878';ctx.strokeRect(30,30,1020,1290);ctx.fillStyle='#b4d878';ctx.font='bold 34px monospace';ctx.fillText('MATHE-ABENTEUER',70,110);ctx.fillStyle='#eef4dc';ctx.font='bold 55px monospace';wrapText(ctx,a.name,70,195,930,65);ctx.drawImage(scene,60,350);
+ ctx.fillStyle='#eef4dc';ctx.font='bold 40px monospace';ctx.fillText(String(s.name).slice(0,20),70,970);ctx.font='28px monospace';wrapText(ctx,a.desc,70,1025,930,40);ctx.fillStyle='#b4d878';ctx.fillText(`Level ${Math.floor(s.xp/100)+1} · ${s.xp} XP · ${s.wins} Siege`,70,1140);ctx.fillStyle='#b5c5c9';ctx.fillText(s.date||'Erfolg freigeschaltet',70,1230);
+ $('cardTitle').textContent=a.name;$('shareNote').textContent='';$('cardImage').src=c.toDataURL('image/png');$('downloadCard').href=$('cardImage').src;$('downloadCard').download='mathe-'+a.id+'.png';$('shareCard').disabled=true;cardBlob=null;c.toBlob(blob=>{cardBlob=blob;$('shareCard').disabled=!blob},'image/png');$('cardDialog').showModal();
+}
+$('shareCard').onclick=async()=>{if(!cardBlob)return;const file=new File([cardBlob],'mathe-erfolg.png',{type:'image/png'});try{if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file],title:'Mein Mathe-Erfolg'});else $('shareNote').textContent='Bitte das Bild lange drücken oder PNG herunterladen.'}catch(e){if(e.name!=='AbortError')$('shareNote').textContent='Teilen war nicht möglich. Bitte PNG herunterladen oder das Bild lange drücken.'}};
+$('closeCard').onclick=()=>$('cardDialog').close();
+$('heroName').onchange=()=>{state.name=$('heroName').value.trim().slice(0,20)||'Abenteurer';save();renderAdventure()};
+$('battle').onclick=startBattle;$('leave').onclick=()=>{endBattle();$('battleStatus').textContent='Kampf verlassen. Dein Lernfortschritt bleibt erhalten.';renderAdventure();newTask()};
+$('backup').onclick=()=>{const blob=new Blob([JSON.stringify({app:'mathe-abenteuer',version:2,state})],{type:'application/json'});const a=document.createElement('a');const url=URL.createObjectURL(blob);a.href=url;a.download='mathe-spielstand.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('restore').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2000000)throw Error('Datei zu groß');const raw=JSON.parse(await file.text());if(raw.app!=='mathe-abenteuer'||raw.version!==2||!raw.state)throw Error('Ungültiger Spielstand');if(!confirm('Aktuellen Spielstand durch diese Sicherung ersetzen?'))return;state=validateState(raw.state);battle=null;$('difficulty').disabled=false;$('topic').disabled=false;unlockAchievements();save();render();newTask()}catch(err){$('storageNote').textContent='Spielstand konnte nicht geladen werden: '+err.message}finally{e.target.value=''}};
+
+$('check').addEventListener('click',check);$('next').addEventListener('click',newTask);$('answer').addEventListener('keydown',e=>{if(e.key==='Enter')check()});$('topic').addEventListener('change',newTask);$('difficulty').addEventListener('change',newTask);$('reset').addEventListener('click',()=>{if(confirm('Wirklich alle XP, Level und Erfolge löschen?')){state=defaults();battle=null;$('difficulty').disabled=false;$('topic').disabled=false;$('battleStatus').dataset.result='';save();render();newTask()}});unlockAchievements();save();render();newTask();
 </script></body></html>
