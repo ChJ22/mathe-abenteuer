@@ -58,3 +58,6 @@ https://supabase.com/docs/guides/api/api-keys
 
 ## Neue Szenengrafiken
 Die neun modernen Blockwelt-Szenen sind direkt in index.html eingebettet. Es müssen weiterhin nur index.html, config.js und cloud.js auf GitHub hochgeladen werden. Bereits gespeicherte Erfolge erhalten automatisch die passende neue Illustration. Name, Erfolgsdatum und Spielstand bleiben erhalten.
+
+## Beispielhilfe
+Bei jeder Aufgabe öffnet Hilfe & Beispiel eine ähnliche Rechnung mit vier erklärten Schritten. Bei richtiger Lösung gibt es mit Hilfe 3/7/15 statt 5/10/20 XP. Bereits verdiente XP werden nicht abgezogen. Erneutes Öffnen kostet nichts zusätzlich. Richtige Antworten zählen weiterhin für Erfolge. Nach Bewertung ist die Beispielhilfe ohne Auswirkung auf die XP verfügbar.
