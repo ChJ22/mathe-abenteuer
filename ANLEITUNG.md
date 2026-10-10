@@ -81,3 +81,5 @@ Für Aufgaben mit Rundung steht die gewünschte Zahl an Nachkommastellen ausdrü
 Bremer Bildungspläne: https://www.lis.bremen.de/schulqualitaet/bildungsplaene/sekundarbereich-i-21953
 
 Gemischte Zahlen sind als Antworten möglich: `2 1/2`, `2½`, `5/2` und `2,5` werden gleich gewertet. `-2 1/2` bedeutet `-2,5`.
+
+Die Spielbereiche sind aufklappbare Hauptmenüs: Aufgaben & Hilfe; Abenteuer, Ausrüstung & Kämpfe; Erfolge & Erinnerungskarten; Lernfortschritt; Spielstand sichern; Konto & Cloud-Spielstand. Tippe auf die jeweilige Überschrift. Eingaben bleiben beim Zuklappen erhalten. Ein gestarteter Kampf öffnet die Aufgaben automatisch.
