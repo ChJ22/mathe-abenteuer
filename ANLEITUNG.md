@@ -55,3 +55,6 @@ Technische Grundlage: Supabase Auth, RLS und revisionsgeprüfte Speicherung. Die
 Supabase-Dokumentation:
 https://supabase.com/docs/guides/database/postgres/row-level-security
 https://supabase.com/docs/guides/api/api-keys
+
+## Neue Szenengrafiken
+Die neun modernen Blockwelt-Szenen sind direkt in index.html eingebettet. Es müssen weiterhin nur index.html, config.js und cloud.js auf GitHub hochgeladen werden. Bereits gespeicherte Erfolge erhalten automatisch die passende neue Illustration. Name, Erfolgsdatum und Spielstand bleiben erhalten.
