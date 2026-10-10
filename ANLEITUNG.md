@@ -61,3 +61,23 @@ Die neun modernen Blockwelt-Szenen sind direkt in index.html eingebettet. Es mü
 
 ## Beispielhilfe
 Bei jeder Aufgabe öffnet Hilfe & Beispiel eine ähnliche Rechnung mit vier erklärten Schritten. Bei richtiger Lösung gibt es mit Hilfe 3/7/15 statt 5/10/20 XP. Bereits verdiente XP werden nicht abgezogen. Erneutes Öffnen kostet nichts zusätzlich. Richtige Antworten zählen weiterhin für Erfolge. Nach Bewertung ist die Beispielhilfe ohne Auswirkung auf die XP verfügbar.
+
+## Klassen 5 bis 10 und Themenwahl
+Auf der Startseite können Klasse und Schwerpunkt ausgewählt werden. Im Training lässt sich beides jederzeit außerhalb eines Kampfes ändern. „Alle Themen dieser Klasse“ mischt die angebotenen Themen. Die Auswahl wird mit dem Spielstand gespeichert. Alte Spielstände und Lernstatistiken bleiben erhalten; neue Statistiken werden pro Klasse, Thema und Schwierigkeit geführt.
+
+Die folgende Verteilung ist eine Orientierung für typische Schulthemen. Schulen und Schulformen behandeln Inhalte teilweise in anderer Reihenfolge. Die App übt ausgewählte rechnerische Grundlagen dieser Bereiche, einschließlich erklärter Beispiele; beispielsweise bei Geometrie Berechnungen und bei Funktionen Funktionswerte. Zeichnen, Beweise und vollständige Lehrplanabdeckung sind nicht Bestandteil dieser Version.
+
+| Klasse | Themen |
+|---|---|
+| 5 | Grundrechenarten/Punkt vor Strich, Dezimalzahlen, Brüche, Einheiten, Flächen/Umfang, Winkel, Daten |
+| 6 | Brüche, Dezimalzahlen, negative Zahlen, Dreisatz, Prozentrechnung, Flächen, Volumen, Daten |
+| 7 | Negative Zahlen, Brüche, Dreisatz, Prozentrechnung, Terme, Gleichungen, Dreiecke, Wahrscheinlichkeit |
+| 8 | Terme/binomische Formeln, Gleichungen, lineare Funktionen, Prozentrechnung, Dreiecke, Kreise, Volumen, Wahrscheinlichkeit, Statistik |
+| 9 | Gleichungssysteme, lineare Funktionen, Potenzen/Wurzeln, Pythagoras, quadratische Funktionen/Gleichungen, Kreise, Volumen, Wahrscheinlichkeit |
+| 10 | Quadratische Funktionen/Gleichungen, Wachstum, Trigonometrie, Pythagoras, Gleichungssysteme, Potenzen/Wurzeln, Volumen, Wahrscheinlichkeit, Statistik |
+
+Für Aufgaben mit Rundung steht die gewünschte Zahl an Nachkommastellen ausdrücklich bei der Aufgabe. Einheiten werden nicht ins Antwortfeld eingegeben. Bei unendlichen Dezimalzahlen bitte den exakten Bruch verwenden. Für die schweren Winkelaufgaben eignet sich ein Taschenrechner im Gradmodus.
+
+Bremer Bildungspläne: https://www.lis.bremen.de/schulqualitaet/bildungsplaene/sekundarbereich-i-21953
+
+Gemischte Zahlen sind als Antworten möglich: `2 1/2`, `2½`, `5/2` und `2,5` werden gleich gewertet. `-2 1/2` bedeutet `-2,5`.
