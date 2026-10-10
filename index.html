@@ -18,6 +18,7 @@
 <canvas id="titleArt" class="title-art" width="960" height="540" role="img" aria-label="Blockheld mit Kristallrüstung vor seiner Hütte in einer grünen Pixelwelt"></canvas>
 <p class="intro">Baue dein Zuhause, sammle Ausrüstung und besiege die Wächter.<br>Jede richtige Antwort bringt dich weiter.</p>
 <div id="welcomeAccount"></div>
+<button id="startAdventure" class="guest-choice" type="button">Abenteuer starten →</button>
 <button id="playGuest" class="secondary guest-choice" type="button">Als Gast spielen →</button>
 <p class="intro"><small>Im Gastmodus bleibt dein Fortschritt auf diesem Gerät.</small></p>
 </section>
@@ -163,7 +164,8 @@ const welcomeFlow={
  account(user){$('showWelcome').hidden=!!user;if(user)this.openGame();else if(this.hasUser)this.openWelcome();this.hasUser=!!user}
 };window.welcomeFlow=welcomeFlow;
 welcomeFlow.openWelcome();
+$('startAdventure').onclick=()=>welcomeFlow.openGame();
 $('playGuest').onclick=()=>{if(window.matheCloud?.user)return;welcomeFlow.openGame()};
 $('showWelcome').onclick=()=>welcomeFlow.openWelcome();
 drawWorld($('titleArt').getContext('2d'),960,540,{home:true,food:true,armor:'crystal',weapon:'crystal'});
-</script><script src="cloud.js"></script></body></html>
+</script><script src="cloud.js?v=20261010-start"></script></body></html>
