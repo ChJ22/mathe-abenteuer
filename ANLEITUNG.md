@@ -85,3 +85,9 @@ Gemischte Zahlen sind als Antworten möglich: `2 1/2`, `2½`, `5/2` und `2,5` we
 Die Spielbereiche sind aufklappbare Hauptmenüs: Aufgaben & Hilfe; Abenteuer, Ausrüstung & Kämpfe; Erfolge & Erinnerungskarten; Lernfortschritt; Spielstand sichern; Konto & Cloud-Spielstand. Tippe auf die jeweilige Überschrift. Eingaben bleiben beim Zuklappen erhalten. Ein gestarteter Kampf öffnet die Aufgaben automatisch.
 
 Aktuell: Es gibt keine Klassenauswahl mehr. Alle 23 Themen stehen alphabetisch zur Verfügung, zusätzlich „Alle Themen (gemischt)“. Einfach/Mittel/Schwer bestimmt die Aufgabenstärke. Bisherige Lernstatistiken verschiedener Klassen werden pro Thema und Schwierigkeit zusammengeführt. XP, Erfolge und Spielstand bleiben erhalten.
+
+Ergänzung: 20 grundlegende Themen von Zählen und Stellenwerten bis schriftlichem Rechnen, Geld, Uhrzeit, Formen, Symmetrie und Sachaufgaben. Insgesamt stehen 43 Themen ohne Klassenbezug alphabetisch zur Auswahl. Alle enthalten Aufgaben und Beispielhilfen.
+
+Auch Zahlen runden sowie Kalender & Zeitmaße sind als Themen verfügbar.
+
+Vorlesen: Mit 🔊 kannst du die aktuelle Aufgabe, das Beispiel mit den eingeblendeten Hilfeschritten, einzelne Schritte und die Rückmeldung auf Deutsch anhören. ⏹ stoppt die Wiedergabe. Nichts wird automatisch vorgelesen. Aufgaben vorlesen reduziert keine XP; die bestehende Regel für Beispielhilfe bleibt bestehen. Die Stimme kommt vom Gerät/Browser.
