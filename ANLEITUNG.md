@@ -83,3 +83,5 @@ Bremer Bildungspläne: https://www.lis.bremen.de/schulqualitaet/bildungsplaene/s
 Gemischte Zahlen sind als Antworten möglich: `2 1/2`, `2½`, `5/2` und `2,5` werden gleich gewertet. `-2 1/2` bedeutet `-2,5`.
 
 Die Spielbereiche sind aufklappbare Hauptmenüs: Aufgaben & Hilfe; Abenteuer, Ausrüstung & Kämpfe; Erfolge & Erinnerungskarten; Lernfortschritt; Spielstand sichern; Konto & Cloud-Spielstand. Tippe auf die jeweilige Überschrift. Eingaben bleiben beim Zuklappen erhalten. Ein gestarteter Kampf öffnet die Aufgaben automatisch.
+
+Aktuell: Es gibt keine Klassenauswahl mehr. Alle 23 Themen stehen alphabetisch zur Verfügung, zusätzlich „Alle Themen (gemischt)“. Einfach/Mittel/Schwer bestimmt die Aufgabenstärke. Bisherige Lernstatistiken verschiedener Klassen werden pro Thema und Schwierigkeit zusammengeführt. XP, Erfolge und Spielstand bleiben erhalten.
