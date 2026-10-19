@@ -1,0 +1,8 @@
+Mathe-Abenteuer – iOS und Android
+
+Alle Dateien dieses Ordners in das GitHub-Repository hochladen. Die Dateien liegen ohne Unterordner auf einer Ebene.
+Nach der GitHub-Pages-Aktualisierung:
+iOS: Safari > Teilen > Zum Home-Bildschirm.
+Android: Chrome > Menü > App installieren oder Zum Startbildschirm hinzufügen.
+Bei altem Icon bestehende Home-Bildschirm-Verknüpfung entfernen und neu hinzufügen.
+Die vorhandene Anwendungslogik wurde nicht verändert.
